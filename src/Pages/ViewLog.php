@@ -46,7 +46,11 @@ class ViewLog extends Page
             return '';
         }
 
-        return File::get($this->logFile);
+        $logContent = File::get($this->logFile);
+
+        $logEntries = preg_split('/(?=\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\])/', $logContent, -1, PREG_SPLIT_NO_EMPTY);
+
+        return collect($logEntries)->reverse()->join("\n");
     }
 
     public function clear(): void
